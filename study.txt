@@ -1,4 +1,5 @@
 根据文档编写第一个程序
+第二部分
 django-admin startproject name 创建一个模板项目
 python manage.py runserver 0:8000 运行创建的项目
 python manage.py migrate 自动创建一些表，检查表的创建状态
@@ -13,4 +14,5 @@ python manage.py shell 生成Django的交互式命令行
     访问数据关系对象：https://docs.djangoproject.com/zh-hans/3.0/ref/models/relations/
     查找字段文档   ：https://docs.djangoproject.com/zh-hans/3.0/topics/db/queries/#field-lookups-intro
 python manage.py createsuperuser 创建管理用户(前提启用管理模块)
-
+第三部分
+    URL调度器文档：https://docs.djangoproject.com/zh-hans/3.0/topics/http/urls/
