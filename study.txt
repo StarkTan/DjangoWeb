@@ -1,0 +1,16 @@
+根据文档编写第一个程序
+django-admin startproject name 创建一个模板项目
+python manage.py runserver 0:8000 运行创建的项目
+python manage.py migrate 自动创建一些表，检查表的创建状态
+python manage.py makemigrations polls  加载应用的模型
+    遇到问题: ModuleNotFoundError: No module named 'polls.apps.PollsConfigdjango'; 'polls.apps' is not a package
+    解决连接：https://blog.csdn.net/wo1769815/article/details/79363889
+python manage.py sqlmigrate polls 0001 获取创建应用模型时的语句，用于数据库迁移
+python manage.py check 检查项目中存在的问题
+python manage.py shell 生成Django的交互式命令行
+    数据操作API文档：https://docs.djangoproject.com/zh-hans/3.0/topics/db/queries/
+    时间操作支持文档：https://docs.djangoproject.com/zh-hans/3.0/topics/i18n/timezones/
+    访问数据关系对象：https://docs.djangoproject.com/zh-hans/3.0/ref/models/relations/
+    查找字段文档   ：https://docs.djangoproject.com/zh-hans/3.0/topics/db/queries/#field-lookups-intro
+python manage.py createsuperuser 创建管理用户(前提启用管理模块)
+
