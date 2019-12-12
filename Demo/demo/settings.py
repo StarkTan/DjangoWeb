@@ -58,7 +58,7 @@ ROOT_URLCONF = 'demo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',  # 默认在每个 install_app 的文件夹下找寻 templates文件夹
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # 全局模板文件夹
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

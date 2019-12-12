@@ -23,5 +23,5 @@ python manage.py test polls 测试应用，测试文件处于polls/tests.py中
     测试文档: https://docs.djangoproject.com/zh-hans/3.0/topics/testing/
 第六部分
     管理静态文件：https://docs.djangoproject.com/zh-hans/3.0/howto/static-files/
-
+第七部分
 
