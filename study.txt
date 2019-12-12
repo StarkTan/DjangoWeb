@@ -16,3 +16,5 @@ python manage.py shell 生成Django的交互式命令行
 python manage.py createsuperuser 创建管理用户(前提启用管理模块)
 第三部分
     URL调度器文档：https://docs.djangoproject.com/zh-hans/3.0/topics/http/urls/
+第四部分
+    多访问下的数据更新：https://docs.djangoproject.com/zh-hans/3.0/ref/models/expressions/#avoiding-race-conditions-using-f
