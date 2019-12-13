@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'media_play.apps.MediaPlayConfig',
     'polls.apps.PollsConfig',  # 加载创建 polls 中的数据模型，千万不要忘了逗号
     'django.contrib.admin',
     'django.contrib.auth',

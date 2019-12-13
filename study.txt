@@ -1,6 +1,7 @@
 根据文档编写第一个程序
 第二部分
 django-admin startproject name 创建一个模板项目
+python manage.py startapp name 创建一个应用
 python manage.py runserver 0:8000 运行创建的项目
 python manage.py migrate 自动创建一些表，检查表的创建状态
 python manage.py makemigrations polls  加载应用的模型
@@ -24,4 +25,13 @@ python manage.py test polls 测试应用，测试文件处于polls/tests.py中
 第六部分
     管理静态文件：https://docs.djangoproject.com/zh-hans/3.0/howto/static-files/
 第七部分
+
+
+
+
+
+
+
+
+
 
