@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+</head>
+<script src="/static/jquery.min.js"></script>
+<script>
+    function FileUpload() {
+        var form_data = new FormData();
+        var file_info =$( '#file_upload')[0].files[0];
+        form_data.append('file',file_info);
+        //if(file_info==undefined)暂且不需要判断是否有附件
+            //alert('你没有选择任何文件');
+            //return false
+        $.ajax({
+            url:'/file_upload/ajax_upload',
+            type:'POST',
+            headers:{'X-CSRFToken':$('[name="csrfmiddlewaretoken"]').val()},
+            data: form_data,
+            processData: false,  // tell jquery not to process the data
+            contentType: false, // tell jquery not to set contentType
+            success: function(callback) {
+                window.location.reload()
+            }
+        });
+    }
+</script>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                <h5>使用FORM表单上传</h5>
+                <form action="/file_upload/form_upload" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="file">
+                    <input type="submit">
+                </form>
+                <h5>使用AJAX上传</h5>
+                <div>
+                    <input type="file" name="file" id="file_upload">
+                    <input type="button" value="上传" onclick="FileUpload()">
+                </div>
+            </td>
+            <td>
+                <h5>文件列表</h5>
+                <ul>
+                {% if files|length == 0 %}
+                    <p><strong>没有文件</strong></p>
+                {% endif %}
+                {% for file in files %}
+                    <li><a href="/static/file_upload/upload/{{file}}" download>{{ file }}</a>
+                        &nbsp; &nbsp;&nbsp;&nbsp;
+                        <a href="/file_upload/delete?name={{file}}">删除</a></li>
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+</body>
+
+
+
+</html>

@@ -18,7 +18,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -34,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'file_upload.apps.FileUploadConfig',
     'media_play.apps.MediaPlayConfig',
     'polls.apps.PollsConfig',  # 加载创建 polls 中的数据模型，千万不要忘了逗号
     'django.contrib.admin',
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  # 静态文件夹管理，会去每个今天
 ]
 
 MIDDLEWARE = [
@@ -122,5 +122,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+# 定义静态文件获取URL
 STATIC_URL = '/static/'
+
+# 定义自定义静态文件夹路径
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "demo/static")
+]

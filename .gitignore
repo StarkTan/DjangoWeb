@@ -3,3 +3,4 @@
 *.iml
 venv
 db.sqlite3
+**/upload/*
