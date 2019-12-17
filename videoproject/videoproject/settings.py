@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'video.apps.VideoConfig',
+    'comment.apps.CommentConfig',
     'sorl.thumbnail',
     'chunked_upload'
 ]

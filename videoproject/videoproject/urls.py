@@ -22,4 +22,5 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('', views.IndexView.as_view(), name='home'),  # 默认首页
     path('video/',include('video.urls')),
+    path('comment/',include('comment.urls')),
 ]

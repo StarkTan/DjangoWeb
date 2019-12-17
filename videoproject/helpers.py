@@ -37,6 +37,7 @@ def get_page_list(paginator, page):
 
     return page_list
 
+
 def ajax_required(f):
     """Not a mixin, but a nice decorator to validate than a request is AJAX"""
     def wrap(request, *args, **kwargs):
