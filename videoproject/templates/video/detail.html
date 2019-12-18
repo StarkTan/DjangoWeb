@@ -20,12 +20,12 @@
             </div>
             <div class="extra content video-view-operation">
                 <span class="left floated like">
-                    <i class="like {%  user_liked_class video user %} icon cursor" id="like"
+                    <i class="like {user_liked_class video user %} icon cursor" id="like"
                        video-id="{{ video.id }}"></i>
                     <span id="like-count">{{ video.count_likers }}</span>
                 </span>
                 <span class="right floated star">
-                    <i class="bookmark {%  user_collected_class video user %}  icon cursor" id="star"
+                    <i class="bookmark {  user_collected_class video user %}  icon cursor" id="star"
                        video-id="{{ video.id }}"></i>
                     <span id="collect-count">{{ video.count_collecters }}</span>
                 </span>
