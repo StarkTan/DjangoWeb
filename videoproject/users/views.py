@@ -1,10 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 
-from helpers import AuthorRequiredMixin
+from helpers import AuthorRequiredMixin, get_page_list
 from ratelimit.decorators import ratelimit
 
 from .forms import SignUpForm, UserLoginForm, ProfileForm, ChangePwdForm, SubscribeForm, FeedbackForm
@@ -116,3 +116,42 @@ class FeedbackView(LoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         messages.success(self.request, "提交成功")
         return reverse('users:feedback')
+
+
+class CollectListView(generic.ListView):
+    model = User
+    template_name = 'users/collect_videos.html'
+    context_object_name = 'video_list'
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CollectListView, self).get_context_data(**kwargs)
+        paginator = context.get('paginator')
+        page = context.get('page_obj')
+        page_list = get_page_list(paginator, page)
+        context['page_list'] = page_list
+        return context
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        videos = user.collected_videos.all()
+        return videos
+
+
+class LikeListView(generic.ListView):
+    model = User
+    template_name = 'users/like_videos.html'
+    context_object_name = 'video_list'
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(LikeListView, self).get_context_data(**kwargs)
+        paginator = context.get('paginator')
+        page = context.get('page_obj')
+        page_list = get_page_list(paginator, page)
+        context['page_list'] = page_list
+        return context
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        videos = user.liked_videos.all()
+        return videos

@@ -29,13 +29,13 @@
                         <i class="user icon"></i>
                         <span>个人资料</span>
                     </div>
-                    <div>
-                    <!--<div class="item" onclick="window.location='{ url 'users:collect_videos' user.pk %}';">-->
+                    <!--<div>-->
+                    <div class="item" onclick="window.location='{% url 'users:collect_videos' user.pk %}';">
                         <i class="bookmark icon"></i>
                         <span>我的收藏</span>
                     </div>
-                    <div>
-                    <!--<div class="item" onclick="window.location='{ url 'users:like_videos' user.pk %}';">-->
+                    <!--<div>-->
+                    <div class="item" onclick="window.location='{% url 'users:like_videos' user.pk %}';">
                         <i class="heart icon"></i>
                         <span>我的喜欢</span>
                     </div>
