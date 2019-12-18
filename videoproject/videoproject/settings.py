@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'video.apps.VideoConfig',
     'comment.apps.CommentConfig',
+    'myadmin.apps.MyadminConfig',
     'sorl.thumbnail',
     'chunked_upload'
 ]
