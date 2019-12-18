@@ -18,6 +18,12 @@ class VideoQuerySet(models.query.QuerySet):
     def get_recommend_list(self):
         return self.filter(status=0).order_by('-view_count')[:4]
 
+    def get_search_list(self, q):
+        if q:
+            return self.filter(title__contains=q).order_by('-create_time')
+        else:
+            return self.order_by('-create_time')
+
 
 class Video(models.Model):
     objects = VideoQuerySet.as_manager()  # 表示用VideoQuerySet作为Video的查询管理器

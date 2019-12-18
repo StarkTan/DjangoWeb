@@ -4,3 +4,6 @@
 venv
 db.sqlite3
 **/upload/*
+**/avatar
+**/cache
+**/chunked_uploads
