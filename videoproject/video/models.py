@@ -109,7 +109,7 @@ class Video(models.Model):
             return 1
 
 
-@receiver(models.signals.post_delete, sender=Video)
+@receiver(models.signals.post_delete, sender=Video)  # Django 中的信号量
 def auto_delete_file_on_delete(sender, instance, **kwargs):
     """
     删除FileField文件
