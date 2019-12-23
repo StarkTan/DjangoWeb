@@ -13,7 +13,9 @@ from django.views.generic import TemplateView
 from .models import MyChunkedUpload
 from video.models import Video,Classification
 from comment.models import Comment
-from .forms import VideoPublishForm, VideoEditForm, ClassificationAddForm, ClassificationEditForm
+from users.models import User
+from .forms import (VideoPublishForm, VideoEditForm, ClassificationAddForm,
+                    ClassificationEditForm, UserAddForm, UserEditForm)
 # Create your views here.
 
 
@@ -207,4 +209,61 @@ def comment_delete(request):
     instance = Comment.objects.get(id=comment_id)
     instance.delete()
     return JsonResponse({"code": 0, "msg": "success"})
+
+
+class UserAddView(SuperUserRequiredMixin, generic.View):
+    def get(self, request):
+        form = UserAddForm()
+        return render(self.request, 'myadmin/user_add.html', {'form': form})
+
+    def post(self, request):
+        form = UserAddForm(data=request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            user.set_password(password)
+            user.save()
+            return render(self.request, 'myadmin/user_add_success.html')
+        return render(self.request, 'myadmin/user_add.html', {'form': form})
+
+
+class UserListView(AdminUserRequiredMixin, generic.ListView):
+    model = User
+    template_name = 'myadmin/user_list.html'
+    context_object_name = 'user_list'
+    paginate_by = 10
+    q = ''
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(UserListView, self).get_context_data(**kwargs)
+        paginator = context.get('paginator')
+        page = context.get('page_obj')
+        page_list = get_page_list(paginator, page)
+        context['page_list'] = page_list
+        context['q'] = self.q
+        return context
+
+    def get_queryset(self):
+        self.q = self.request.GET.get("q", "")
+        return User.objects.filter(username__contains=self.q).order_by('-date_joined')
+
+
+class UserEditView(SuperUserRequiredMixin, generic.UpdateView):
+    model = User
+    form_class = UserEditForm
+    template_name = 'myadmin/user_edit.html'
+
+    def get_success_url(self):
+        messages.success(self.request, "保存成功")
+        return reverse('myadmin:user_edit', kwargs={'pk': self.kwargs['pk']})
+
+
+@ajax_required
+@require_http_methods(["POST"])
+def user_delete(request):
+    user_id = request.POST['user_id']
+    instance = User.objects.get(id=user_id)
+    instance.delete()
+    return JsonResponse({"code": 0, "msg": "success"})
+
 
