@@ -1,19 +1,23 @@
+import smtplib
+
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from chunked_upload.views import ChunkedUploadView, ChunkedUploadCompleteView
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import generic
 from django.views.decorators.http import require_http_methods
 from users.forms import UserLoginForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from helpers import SuperUserRequiredMixin,AdminUserRequiredMixin,get_page_list,ajax_required
+from helpers import SuperUserRequiredMixin,AdminUserRequiredMixin,get_page_list,ajax_required, send_html_email
 from django.views.generic import TemplateView
 from .models import MyChunkedUpload
 from video.models import Video,Classification
 from comment.models import Comment
 from users.models import User
+from django.conf import settings
 from .forms import (VideoPublishForm, VideoEditForm, ClassificationAddForm,
                     ClassificationEditForm, UserAddForm, UserEditForm)
 # Create your views here.
@@ -266,4 +270,32 @@ def user_delete(request):
     instance.delete()
     return JsonResponse({"code": 0, "msg": "success"})
 
+
+class SubscribeView(SuperUserRequiredMixin, generic.View):
+
+    def get(self, request):
+        video_list = Video.objects.get_published_list()
+        return render(request, "myadmin/subscribe.html" ,{'video_list':video_list})
+
+    def post(self, request):
+        video_id = request.POST['video_id']
+        video = Video.objects.get(id=video_id)
+        subject = video.title
+        # context = {'video': video,'site_url':settings.SITE_URL}
+        context = {'video': video}
+        html_message = render_to_string('myadmin/mail_template.html', context)
+        email_list = User.objects.filter(subscribe=True).values_list('email',flat=True)
+        # 分组
+        email_list = [email_list[i:i + 2] for i in range(0, len(email_list), 2)]
+
+        if email_list:
+            for to_list in email_list:
+                try:
+                    send_html_email(subject, html_message, to_list)
+                except smtplib.SMTPException as e:
+                    print(e)
+                    return JsonResponse({"code": 1, "msg": "发送失败"})
+            return JsonResponse({"code": 0, "msg": "success"})
+        else:
+            return JsonResponse({"code": 1, "msg": "邮件列表为空"})
 

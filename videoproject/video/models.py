@@ -15,14 +15,27 @@ class Classification(models.Model):
 
 
 class VideoQuerySet(models.query.QuerySet):
-    def get_recommend_list(self):
-        return self.filter(status=0).order_by('-view_count')[:4]
+
+    def get_count(self):
+        return self.count()
+
+    def get_published_count(self):
+        return self.filter(status=0).count()
+
+    def get_not_published_count(self):
+        return self.filter(status=1).count()
+
+    def get_published_list(self):
+        return self.filter(status=0).order_by('-create_time')
 
     def get_search_list(self, q):
         if q:
             return self.filter(title__contains=q).order_by('-create_time')
         else:
             return self.order_by('-create_time')
+
+    def get_recommend_list(self):
+        return self.filter(status=0).order_by('-view_count')[:4]
 
 
 class Video(models.Model):

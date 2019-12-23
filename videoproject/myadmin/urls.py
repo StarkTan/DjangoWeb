@@ -29,4 +29,7 @@ urlpatterns = [
     path('user_list/', views.UserListView.as_view(), name='user_list'),
     path('user_edit/<int:pk>',views.UserEditView.as_view(), name='user_edit'),
     path('user_delete/', views.user_delete, name='user_delete'),
+
+    path('subscribe/', views.SubscribeView.as_view(), name='subscribe'),
+
 ]
