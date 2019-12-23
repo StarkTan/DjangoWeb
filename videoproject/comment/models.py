@@ -1,6 +1,19 @@
+import datetime
+
 from django.db import models
 from django.conf import settings
 from video.models import Video
+
+
+class CommentQuerySet(models.query.QuerySet):
+
+    # 评论总数
+    def get_count(self):
+        return self.count()
+
+    # 今日新增
+    def get_today_count(self):
+        return self.exclude(timestamp__lt=datetime.date.today()).count()
 
 
 # Create your models here.
@@ -11,6 +24,7 @@ class Comment(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     content = models.CharField(max_length=100)
     timestamp = models.DateTimeField(auto_now_add=True)
+    objects = CommentQuerySet.as_manager()
 
     class Meta:
         db_table = "v_comment"

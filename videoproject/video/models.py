@@ -1,14 +1,18 @@
 from django.db import models
-
+import os
 
 # Create your models here.
 from django.conf import settings
+from django.dispatch import receiver
 
 
 class Classification(models.Model):
     list_display = ("title",)
     title = models.CharField(max_length=100, blank=True, null=True)  # 分类名称
     status = models.BooleanField(default=True)  # 是否启用
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         db_table = "v_classification"
@@ -39,7 +43,7 @@ class VideoQuerySet(models.query.QuerySet):
 
 
 class Video(models.Model):
-    objects = VideoQuerySet.as_manager()  # 表示用VideoQuerySet作为Video的查询管理器
+
     STATUS_CHOICES = (
         ('0', '发布中'),
         ('1', '未发布'),
@@ -57,6 +61,8 @@ class Video(models.Model):
                                        blank=True, related_name="collected_videos")
     create_time = models.DateTimeField(auto_now_add=True, blank=True, max_length=20)
 
+    objects = VideoQuerySet.as_manager()  # 表示用VideoQuerySet作为Video的查询管理器
+
     def increase_view_count(self):
         self.view_count += 1
         self.save(update_fields=['view_count'])
@@ -67,3 +73,47 @@ class Video(models.Model):
         else:
             self.liked.add(user)
 
+    def increase_view_count(self):
+        self.view_count += 1
+        self.save(update_fields=['view_count'])
+
+    def switch_like(self, user):
+        if user in self.liked.all():
+            self.liked.remove(user)
+        else:
+            self.liked.add(user)
+
+    def count_likers(self):
+        return self.liked.count()
+
+    def user_liked(self, user):
+        if user in self.liked.all():
+            return 0
+        else:
+            return 1
+
+    def switch_collect(self, user):
+        if user in self.collected.all():
+            self.collected.remove(user)
+
+        else:
+            self.collected.add(user)
+
+    def count_collecters(self):
+        return self.collected.count()
+
+    def user_collected(self, user):
+        if user in self.collected.all():
+            return 0
+        else:
+            return 1
+
+
+@receiver(models.signals.post_delete, sender=Video)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    删除FileField文件
+    """
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)

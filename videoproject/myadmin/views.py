@@ -1,4 +1,5 @@
 import smtplib
+import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate
@@ -329,3 +330,22 @@ def feedback_delete(request):
     instance.delete()
     return JsonResponse({"code": 0, "msg": "success"})
 
+
+class IndexView(AdminUserRequiredMixin, generic.View):
+
+    def get(self, request):
+        video_count = Video.objects.get_count()
+        video_has_published_count = Video.objects.get_published_count()
+        video_not_published_count = Video.objects.get_not_published_count()
+        user_count = User.objects.count()
+        user_today_count = User.objects.exclude(date_joined__lt=datetime.date.today()).count()
+        comment_count = Comment.objects.get_count()
+        comment_today_count = Comment.objects.get_today_count()
+        data = {"video_count": video_count,
+                "video_has_published_count": video_has_published_count,
+                "video_not_published_count": video_not_published_count,
+                "user_count": user_count,
+                "user_today_count": user_today_count,
+                "comment_count": comment_count,
+                "comment_today_count": comment_today_count}
+        return render(self.request, 'myadmin/index.html', data)

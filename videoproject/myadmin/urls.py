@@ -6,6 +6,8 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
 
+    path('', views.IndexView.as_view(), name='index'),
+
     path('video_add/', views.AddVideoView.as_view(), name='video_add'),
 
     path('chunked_upload/',  views.MyChunkedUploadView.as_view(), name='api_chunked_upload'),
