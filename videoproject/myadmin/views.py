@@ -12,6 +12,7 @@ from helpers import SuperUserRequiredMixin,AdminUserRequiredMixin,get_page_list,
 from django.views.generic import TemplateView
 from .models import MyChunkedUpload
 from video.models import Video,Classification
+from comment.models import Comment
 from .forms import VideoPublishForm, VideoEditForm, ClassificationAddForm, ClassificationEditForm
 # Create your views here.
 
@@ -174,3 +175,36 @@ def classification_delete(request):
     instance = Classification.objects.get(id=classification_id)
     instance.delete()
     return JsonResponse({"code": 0, "msg": "success"})
+
+
+
+
+class CommentListView(AdminUserRequiredMixin, generic.ListView):
+    model = Comment
+    template_name = 'myadmin/comment_list.html'
+    context_object_name = 'comment_list'
+    paginate_by = 10
+    q = ''
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CommentListView, self).get_context_data(**kwargs)
+        paginator = context.get('paginator')
+        page = context.get('page_obj')
+        page_list = get_page_list(paginator, page)
+        context['page_list'] = page_list
+        context['q'] = self.q
+        return context
+
+    def get_queryset(self):
+        self.q = self.request.GET.get("q", "")
+        return Comment.objects.filter(content__contains=self.q).order_by('-timestamp')
+
+
+@ajax_required
+@require_http_methods(["POST"])
+def comment_delete(request):
+    comment_id = request.POST['comment_id']
+    instance = Comment.objects.get(id=comment_id)
+    instance.delete()
+    return JsonResponse({"code": 0, "msg": "success"})
+

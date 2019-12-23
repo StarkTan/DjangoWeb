@@ -21,4 +21,7 @@ urlpatterns = [
     path('classification_list/', views.ClassificationListView.as_view(), name='classification_list'),
     path('classification_edit/<int:pk>/', views.ClassificationEditView.as_view(), name='classification_edit'),
     path('classification_delete/', views.classification_delete, name='classification_delete'),
+
+    path('comment_list/', views.CommentListView.as_view(), name='comment_list'),
+    path('comment_delete/', views.comment_delete, name='comment_delete'),
 ]
