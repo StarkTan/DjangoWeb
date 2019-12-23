@@ -28,6 +28,8 @@ python manage.py test polls 测试应用，测试文件处于polls/tests.py中
 
 
 
+其他内容：
+    Django 中信号量使用：https://www.cnblogs.com/liwenzhou/p/9745331.html
 
 
 
