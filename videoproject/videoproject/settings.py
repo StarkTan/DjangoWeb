@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -110,8 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans' # zh-hans为中文编码
-TIME_ZONE = 'Asia/Shanghai' # 国际时区改成中国时区
+LANGUAGE_CODE = 'zh-hans'  # zh-hans为中文编码
+TIME_ZONE = 'Asia/Shanghai'  # 国际时区改成中国时区
 USE_I18N = True
 USE_L10N = True
 USE_TZ = False

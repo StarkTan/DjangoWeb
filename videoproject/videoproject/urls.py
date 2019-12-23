@@ -26,4 +26,4 @@ urlpatterns = [
     path('video/',include('video.urls')),
     path('comment/',include('comment.urls')),
     path('myadmin/',include('myadmin.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # 指定上传文件的路径
