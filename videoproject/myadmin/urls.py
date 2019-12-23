@@ -32,4 +32,7 @@ urlpatterns = [
 
     path('subscribe/', views.SubscribeView.as_view(), name='subscribe'),
 
+    path('feedback_list/', views.FeedbackListView.as_view(), name='feedback_list'),
+    path('feedback_delete/', views.feedback_delete, name='feedback_delete'),
+
 ]
