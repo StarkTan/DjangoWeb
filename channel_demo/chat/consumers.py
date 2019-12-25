@@ -37,7 +37,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # Receive message from room group
+    # 处理 type 为 chat_message 的消息
     async def chat_message(self, event):
         message = event['message']
 
@@ -45,3 +45,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'message': message
         }))
+
+    # 处理 type 为 broadcast_message 的消息
+    async def broadcast_message(self, event):
+        message = event['message']
+
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'message': 'broadcast :' + message
+        }))
+
+
