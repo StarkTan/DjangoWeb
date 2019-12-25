@@ -11,6 +11,7 @@ def start_running(nums):
     print('>>'*(i+1))
     time.sleep(1)
   print('>---任务结束---<')
+  return True
 
 
 @shared_task

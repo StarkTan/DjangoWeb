@@ -13,5 +13,6 @@ class IdexView(View):
         for i in range(10):
             print('>>', end='')
             time.sleep(0.1)
-        start_running.delay('》》》》》我是传送过来的《《《《《')
+        result = start_running.delay('》》》》》我是传送过来的《《《《《')
+        # print(result.get(timeout=11))  # 获取执行结果
         return HttpResponse('<h2> 请求已发送 </h2>')
