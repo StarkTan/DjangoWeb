@@ -9,3 +9,6 @@ sorl-thumbnail==12.5.0
 pillow==5.3.0
 channels
 channels_redis
+celery
+django-celery
+redis==2.10.6

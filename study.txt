@@ -35,7 +35,7 @@ python manage.py test polls 测试应用，测试文件处于polls/tests.py中
     Django 中信号量使用：https://www.cnblogs.com/liwenzhou/p/9745331.html
     Windows上安装Redis：https://blog.csdn.net/phoine/article/details/88898187
     django-crontab使用(只能在linux上)： https://www.cnblogs.com/linwenbin/p/11461131.html
-
+    dajngo-celery实现定时/异步任务：https://www.cnblogs.com/wuyongcong/p/9773345.html
 
 
 

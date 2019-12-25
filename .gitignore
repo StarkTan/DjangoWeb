@@ -8,3 +8,4 @@ db.sqlite3
 **/cache
 **/chunked_uploads
 **/logs
+**/celerybeat-*

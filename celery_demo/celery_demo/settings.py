@@ -127,6 +127,17 @@ STATIC_URL = '/static/'
 import djcelery
 djcelery.setup_loader()
 BROKER_URL = 'redis://127.0.0.1:6379/'  #任务存放位置
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/'
 CELERY_IMPORTS = ('app.tasks')
 CELERY_TIMEZONE = 'Asia/Shanghai'
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+# CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler' 使用django的ORM进行存储
+
+CELERYBEAT_SCHEDULE = {  # 定时器策略
+    # 定时任务一：　每隔10s运行一次
+    u'测试定时器1': {
+        "task": "app.tasks.hello_world",
+        # "schedule": crontab(minute='*/2'),  # or 'schedule':   timedelta(seconds=3),
+        "schedule": timedelta(seconds=10),
+        "args": (),
+    },
+}

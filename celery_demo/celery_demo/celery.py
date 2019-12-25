@@ -5,10 +5,11 @@ from celery import Celery
 from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celery_sq.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celery_demo.settings')
 
 app = Celery('celery_demo')
 
+# 这一步让你可以在django的settings.py中配置celery
 app.config_from_object('django.conf:settings')
 
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

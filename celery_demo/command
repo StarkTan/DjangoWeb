@@ -1,0 +1,4 @@
+启动异步任务
+    python manage.py celery worker --loglevel=info
+启动定时任务
+    celery -A celery_demo beat -l info
