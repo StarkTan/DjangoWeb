@@ -108,7 +108,7 @@ class SnippetDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 """
 
-
+"""
 # 继承多个功能模块实现视图
 class SnippetList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
@@ -138,5 +138,16 @@ class SnippetDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+"""
 
+
+# 继承通用模块实现视图
+class SnippetList(generics.ListCreateAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+
+class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
 
