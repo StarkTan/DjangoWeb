@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from celery.schedules import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -33,6 +33,7 @@ ASGI_APPLICATION = 'channel_demo.routing.application'
 # Application definition
 
 INSTALLED_APPS = [
+    'djcelery',
     'channels',
     'chat',
     'django.contrib.admin',
@@ -129,3 +130,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'redis://127.0.0.1:6379/'  #任务存放位置
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/'
+CELERY_IMPORTS = ('chat.tasks')
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYBEAT_SCHEDULE = {  # 定时器策略
+    # 定时任务一：　每隔10s运行一次
+    u'测试定时器1': {
+        "task": "chat.tasks.hello_world",
+        # "schedule": crontab(minute='*/2'),  # or 'schedule':   timedelta(seconds=3),
+        "schedule": timedelta(seconds=10),
+        "args": (),
+    },
+}
