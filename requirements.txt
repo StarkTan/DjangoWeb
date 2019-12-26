@@ -13,3 +13,5 @@ celery
 django-celery
 redis==2.10.6
 djangorestframework
+代码高亮
+pygments

@@ -9,3 +9,4 @@ db.sqlite3
 **/chunked_uploads
 **/logs
 **/celerybeat-*
+**/*initial.py
