@@ -12,3 +12,4 @@ channels_redis
 celery
 django-celery
 redis==2.10.6
+djangorestframework
