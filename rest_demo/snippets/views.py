@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from .models import Snippet
 from .serializers import SnippetSerializer
 
+from rest_framework import mixins
+from rest_framework import generics
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -64,12 +66,9 @@ def snippet_detail(request, pk, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 """
 
-
+"""
 # 继承 APIView 生成视图
 class SnippetList(APIView):
-    """
-    List all snippets, or create a new snippet.
-    """
     def get(self, request, format=None):
         snippets = Snippet.objects.all()
         serializer = SnippetSerializer(snippets, many=True)
@@ -84,9 +83,6 @@ class SnippetList(APIView):
 
 
 class SnippetDetail(APIView):
-    """
-    Retrieve, update or delete a snippet instance.
-    """
     def get_object(self, pk):
         try:
             return Snippet.objects.get(pk=pk)
@@ -110,5 +106,37 @@ class SnippetDetail(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+"""
+
+
+# 继承多个功能模块实现视图
+class SnippetList(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class SnippetDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
