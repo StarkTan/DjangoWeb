@@ -9,6 +9,8 @@ urlpatterns = [
 
     path('snippets/', views.SnippetList.as_view()),
     path('snippets/<int:pk>/', views.SnippetDetail.as_view()),
+    path('users/', views.UserList.as_view()),
+    path('users/<int:pk>/', views.UserDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)  # 返回一个 URL pattern 列表，其中包含附加到每个 URL pattern 的格式后缀模式

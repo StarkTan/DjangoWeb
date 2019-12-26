@@ -15,3 +15,5 @@ redis==2.10.6
 djangorestframework
 代码高亮
 pygments
+http请求工具
+httpie

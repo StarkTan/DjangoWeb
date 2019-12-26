@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from .models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from django.contrib.auth.models import User
 
 
 class SnippetSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')  # ReadOnlyField 展示有用，更新时无效
     # ModelSerializer 功能
     #   自动确定的字段集。
     #   简单的默认的create() and update() 方法实现。
@@ -19,7 +21,8 @@ class SnippetSerializer(serializers.ModelSerializer):
     # 使用 ModelSerializer 简化的字段表示
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
+        fields = ('id', 'title', 'code', 'linenos', 'language', 'style','owner')
+
 
     # # 实例的构造 ModelSerializer 优化前的代码
     # def create(self, validated_data):
@@ -40,3 +43,11 @@ class SnippetSerializer(serializers.ModelSerializer):
     #     instance.style = validated_data.get('style', instance.style)
     #     instance.save()
     #     return instance
+
+
+class UserSerializer(serializers.ModelSerializer):
+    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'snippets')
