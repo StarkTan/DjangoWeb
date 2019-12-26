@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 class SnippetSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')  # ReadOnlyField 展示有用，更新时无效
+    highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
+
     # ModelSerializer 功能
     #   自动确定的字段集。
     #   简单的默认的create() and update() 方法实现。
@@ -21,7 +23,7 @@ class SnippetSerializer(serializers.ModelSerializer):
     # 使用 ModelSerializer 简化的字段表示
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'linenos', 'language', 'style','owner')
+        fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'owner','highlight')
 
 
     # # 实例的构造 ModelSerializer 优化前的代码
