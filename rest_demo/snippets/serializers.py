@@ -23,10 +23,13 @@ class SnippetSerializer(serializers.ModelSerializer):
     # 使用 ModelSerializer 简化的字段表示
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'owner','highlight')
+        fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'owner', 'highlight')
+        # 可以对 更多的字段进行定义
+        # read_only_fields = ("user"，)  # 定义read_only_fields
+        # exclude = ("status",)
 
 
-    # # 实例的构造 ModelSerializer 优化前的代码
+        # # 实例的构造 ModelSerializer 优化前的代码
     # def create(self, validated_data):
     #     """
     #     Create and return a new `Snippet` instance, given the validated data.

@@ -21,7 +21,7 @@ from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.reverse import reverse
 from rest_framework import renderers
-
+from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -187,7 +187,7 @@ class SnippetViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
-    @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer]) # 使用action注解创建自己想要的节点
+    @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])  # 使用action注解创建自己想要的节点
     def highlight(self, request, *args, **kwargs):
         snippet = self.get_object()
         return Response(snippet.highlighted)
@@ -202,6 +202,22 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    # 过滤
+    # filter 操作依赖于filter_backends，所以需要先指定backends（可以自定义）  django_filters 是 额外引入的包
+    # filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    # 指定filter 的字段
+    # filter_fields = ('category', 'in_stock')
+    # 搜索
+    # backends 中加入SearchFilter 才能激活搜索，字段为 search
+    # filter_backends = (filters.SearchFilter,)
+    # search_fields = ('username', 'email','profile__profession')
+    # 排序
+    # backend 中加入OrderingFilter 激活ordering filter，字段为ordering
+    # filter_backends = (filters.OrderingFilter,)
+    # ordering_fields = ('account', 'username', 'email')
+    # # 指定默认的排序字段
+    # ordering = ('username',)
 
 
 @api_view(['GET'])

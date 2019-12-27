@@ -51,8 +51,10 @@ from django.urls import path, include
 # ]
 
 
-# Create a router and register our viewsets with it.
+# 因为使用的ViewSet不同于Django的View 修改了分发方式 所以使用router作为分发处理
 router = DefaultRouter()
+
+# register(self, prefix, viewset, basename=None)  如果ViewSet里面没有basename则需要填入basename参数
 router.register(r'snippets', views.SnippetViewSet)
 router.register(r'users', views.UserViewSet)
 
