@@ -181,6 +181,19 @@ class SnippetViewSet(viewsets.ModelViewSet):
     `update` and `destroy` actions.
 
     Additionally we also provide an extra `highlight` action.
+
+    create:
+    创建项目
+    retrieve:
+    获取项目详情数据
+    update:
+    完整更新项目
+    destroy:
+    删除项目
+    list:
+    获取项目列表数据
+
+
     """
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
@@ -189,6 +202,9 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])  # 使用action注解创建自己想要的节点
     def highlight(self, request, *args, **kwargs):
+        """
+        自己创建的节点
+        """
         snippet = self.get_object()
         return Response(snippet.highlighted)
 

@@ -17,3 +17,5 @@ djangorestframework
 pygments
 http请求工具
 httpie
+# restapi 展示工具
+drf-yasg
