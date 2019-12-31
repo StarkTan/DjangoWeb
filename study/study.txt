@@ -3,7 +3,8 @@
 django-admin startproject name 创建一个模板项目
 python manage.py startapp name 创建一个应用
 python manage.py runserver 0:8000 运行创建的项目
-python manage.py migrate 自动创建一些表，检查表的创建状态
+python manage.py migrate 同步default数据库
+./manage.py migrate --database=xxx 同步指定数据库
 python manage.py makemigrations polls  加载应用的模型
     遇到问题: ModuleNotFoundError: No module named 'polls.apps.PollsConfigdjango'; 'polls.apps' is not a package
     解决连接：https://blog.csdn.net/wo1769815/article/details/79363889
@@ -31,13 +32,13 @@ python manage.py test polls 测试应用，测试文件处于polls/tests.py中
     REST framework 文档：http://www.sinodocs.cn/
     REST framework 博客: https://www.cnblogs.com/yuzhenjie/p/10343016.html
 
-
 其他内容：
     Django 中信号量使用：https://www.cnblogs.com/liwenzhou/p/9745331.html
     Windows上安装Redis：https://blog.csdn.net/phoine/article/details/88898187
     django-crontab使用(只能在linux上)： https://www.cnblogs.com/linwenbin/p/11461131.html
     dajngo-celery实现定时/异步任务：https://www.cnblogs.com/wuyongcong/p/9773345.html
     django 中间件处理：https://www.cnblogs.com/buyisan/p/8557252.html
+    多数据库使用：https://docs.djangoproject.com/zh-hans/3.0/topics/db/multi-db/
 
 
 

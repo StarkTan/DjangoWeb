@@ -2,7 +2,7 @@
 .idea
 *.iml
 venv
-db.sqlite3
+*.sqlite3
 **/upload/*
 **/avatar
 **/cache
