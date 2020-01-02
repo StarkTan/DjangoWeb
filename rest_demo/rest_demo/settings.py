@@ -126,13 +126,18 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     # 分页设置
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+
+    # 全局权限默认配置（第一种配置方式）
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.BasicAuthentication',
+    #     'rest_framework.authentication.SessionAuthentication',
+    # )
 
     # 其他的一些配置
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'utils.permissions.AdminAuth',
-    #     ),
     # 'EXCEPTION_HANDLER': 'utils.custom_exception_handler.custom_exception_handler',
     # "DEFAULT_RENDERER_CLASSES":('rest_framework.renderers.JSONRenderer',),
     # 'DATETIME_FORMAT': "%Y-%m-%d %H:%M",
+
+
 }

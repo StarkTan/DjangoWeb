@@ -199,6 +199,9 @@ class SnippetViewSet(viewsets.ModelViewSet):
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
+    # 在APIView或者ViewSet上的认证方式（第二种认证方式）
+    # authentication_classes = (SessionAuthentication, BasicAuthentication)
+    # permission_classes = (IsAuthenticated,)
 
     @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])  # 使用action注解创建自己想要的节点
     def highlight(self, request, *args, **kwargs):
@@ -237,6 +240,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @api_view(['GET'])
+# 在函数上的权限认证方式
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def api_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),
