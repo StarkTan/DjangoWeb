@@ -12,15 +12,26 @@ client = mqtt.Client(client_id="test", clean_session=False)
 
 # 建立mqtt连接
 def on_connect(client, userdata, flag, rc):
-    print(time.time())
     print("Connect with the result code " + str(rc))
-    client.subscribe('test/#')
-
+    client.subscribe('/usi/device/config/#')
+    client.subscribe('/usi/device/data/#')
 
 # 接收、处理mqtt消息
 def on_message(client, userdata, msg):
     print(msg.topic)
     print(msg.payload)
+
+    if float(json.loads(msg.payload)['version']) <=1.1:
+        dev_msg = {
+            'sn': 'test00001',
+            'name': 'loacl_test',
+            'version': '1.2',
+            'config': {
+                'switch_led1': 'on',
+                'slider_led2_0_100': 60,
+            }
+        }
+        client.publish('/usi/cloud/config/test00001', json.dumps(dev_msg), qos=1)
 
 
 # mqtt客户端启动函数
