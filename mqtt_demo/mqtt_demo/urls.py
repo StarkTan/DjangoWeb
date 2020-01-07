@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from mqtt_client import mqtt_config  # 启动mqtt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
