@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mqtt_client',
+    'device',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
