@@ -39,6 +39,7 @@ python manage.py test polls 测试应用，测试文件处于polls/tests.py中
     dajngo-celery实现定时/异步任务：https://www.cnblogs.com/wuyongcong/p/9773345.html
     django 中间件处理：https://www.cnblogs.com/buyisan/p/8557252.html
     多数据库使用：https://docs.djangoproject.com/zh-hans/3.0/topics/db/multi-db/
+    Django 集成 mqtt：https://blog.csdn.net/qq_36963372/article/details/88866459
 
 
 
