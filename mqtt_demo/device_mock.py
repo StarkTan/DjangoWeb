@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 import json
-sn = 'test00001'
+sn = 'test00002'
 cfg_pub = '/usi/device/config/%s' % sn
 cfg_sub = '/usi/cloud/config/%s' %sn
 # 配置文件

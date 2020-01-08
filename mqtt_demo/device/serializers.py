@@ -5,5 +5,5 @@ from .models import Device
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
-        fields = ('id', 'name', 'config')
-        read_only_fields = ("id", 'name')
+        fields = ('id', 'name', 'config', 'confirm')
+        read_only_fields = ("id", 'name', 'confirm')
