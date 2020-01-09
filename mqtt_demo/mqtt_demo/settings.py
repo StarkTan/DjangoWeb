@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mqtt_client',
-    'device',
+    'mqtt_client.apps.MqttClientConfig',
+    'device.apps.DeviceConfig',
     'rest_framework',
 ]
 

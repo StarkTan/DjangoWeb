@@ -15,10 +15,9 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
 
-    argv = sys.argv
-    if len(argv) < 2:
-        argv = argv + ['runserver', '--noreload']
-    execute_from_command_line(argv)
+    if len(sys.argv) < 2:
+        sys.argv = sys.argv + ['runserver', '--noreload']
+    execute_from_command_line(sys.argv)
 
 
 if __name__ == '__main__':

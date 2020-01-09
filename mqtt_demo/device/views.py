@@ -6,7 +6,7 @@ from .models import Device
 from .serializers import DeviceSerializer
 # Create your views here.
 from rest_framework import viewsets, mixins
-from mqtt_client.mqtt_config import client
+from mqtt_client.apps import client
 
 pub_pre = '/usi/cloud/config/'
 
