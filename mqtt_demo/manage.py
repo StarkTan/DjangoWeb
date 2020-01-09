@@ -17,7 +17,7 @@ def main():
 
     argv = sys.argv
     if len(argv) < 2:
-        argv = argv + ['runserver']
+        argv = argv + ['runserver', '--noreload']
     execute_from_command_line(argv)
 
 
