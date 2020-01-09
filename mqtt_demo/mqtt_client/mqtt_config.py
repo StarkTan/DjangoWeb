@@ -38,24 +38,25 @@ def on_message(client, userdata, msg):
                     device = Device()
                     device.id = sn
                     device.name = dev_msg['name']
-                    device.config = json.dumps(dev_msg)
+                    device.config = json.dumps(dev_msg['config'])
+                    device.version = dev_msg['version']
                     device.save()
                     print('dev_msg saved')
                 else:
                     device = res[0]
                     local_ver = dev_msg['version'].split('.')
-                    cloud_ver = json.loads(device.config)['version'].split('.')
-                    print(local_ver,cloud_ver)
+                    cloud_ver = device.version.split('.')
                     if int(local_ver[0]) > int(cloud_ver[0]) or \
                             (int(local_ver[0]) == int(cloud_ver[0]) and int(local_ver[1]) >= int(cloud_ver[1])):
-                        device.config = json.dumps(dev_msg)
+                        device.config = json.dumps(dev_msg['config'])
                         device.confirm = True
+                        device.version = dev_msg['version']
                         device.save()
                         print('dev_msg updated')
                     else:
                         device.confirm = False
                         device.save()
-                        client.publish(pub_pre+sn, device.config, qos=1)
+                        client.publish(pub_pre+sn, json.dumps(device.pub_msg()), qos=1)
                         print('confirm dev_config')
         except Exception as e:
             print(e)
@@ -68,18 +69,6 @@ def on_message(client, userdata, msg):
             print('handle data')
     else:
         print('found unknown msg topic %s payload %s' % (msg.topic, msg.topic))
-
-    # if float(json.loads(msg.payload)['version']) <= 1.1:
-    #     dev_msg = {
-    #         'sn': 'test00001',
-    #         'name': 'loacl_test',
-    #         'version': '1.2',
-    #         'config': {
-    #             'switch_led1': 'on',
-    #             'slider_led2_0_100': 60,
-    #         }
-    #     }
-    #     client.publish('/usi/cloud/config/test00001', json.dumps(dev_msg), qos=1)
 
 
 # mqtt客户端启动函数
@@ -95,10 +84,11 @@ def mqtt_function():
 def mqtt_run():
     client.on_connect = on_connect
     client.on_message = on_message
-    broker = '127.0.0.1'
-    client.connect(broker, 1883, 600)
-    client.username_pw_set('user', 'user')
+    # broker = '127.0.0.1'  # 47.52.203.253
+    broker = '47.52.203.253'
+    client.username_pw_set('mqtttest', '123456')
     client.reconnect_delay_set(min_delay=1, max_delay=2000)
+    client.connect(broker, 2016, 600)
     mqttthread = Thread(target=mqtt_function)
     mqttthread.start()
     mqtt_function()

@@ -45,11 +45,10 @@ def on_message(client, userdata, msg):
             value = cloud_cfg[key]
             arr = key.split('_')
             if arr[0].lower() == 'switch':
-                if not value =='on' and dev_cfg[key]=='on':
-                    continue
                 if not value == 'on':
                     value = 'off'
-                print('set %s status to %s'%(arr[0], value))
+                if not dev_cfg[key] == value:
+                    print('set %s status to %s'%(arr[0], value))
             elif arr[0].lower() == 'slider':
                 print('set %s data to %s' % (arr[0], value))
             dev_cfg[key] = value
@@ -60,6 +59,8 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect('127.0.0.1', 1883, 600) # 600为keepalive的时间间隔
+broker = '47.52.203.253'
+client.username_pw_set('mqtttest', '123456')
+client.connect(broker, 2016, 600)
 client.subscribe(cfg_sub, qos=1)
 client.loop_forever()  # 一直保持连接

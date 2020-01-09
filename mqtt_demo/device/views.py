@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+import json
 from .models import Device
 from .serializers import DeviceSerializer
 # Create your views here.
@@ -16,15 +16,18 @@ class DeviceViewSet(mixins.UpdateModelMixin,
     serializer_class = DeviceSerializer
 
     def update(self, request, *args, **kwargs):
-        super().update(request, *args, **kwargs)
+        return super().update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
+        # 更新前修改部分数据
+        instance = self.get_object()
+        ver_arr = instance.version.split('.')
+        serializer.validated_data['version'] = ver_arr[0]+'.'+str(int(ver_arr[1])+1)
         serializer.validated_data['confirm'] = False
         serializer.save()
         sn = serializer.data['id']
-        config = serializer.data['config']
         # 推送数据
-        client.publish(pub_pre + sn, config, qos=1)
+        client.publish(pub_pre + sn, json.dumps(Device.objects.get(id=sn).pub_msg()), qos=1)
 
     @action(methods=['GET'],detail=True)
     def config(self, request, *args, **kwargs):
