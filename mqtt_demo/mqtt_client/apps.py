@@ -1,11 +1,10 @@
 import sys
 import json
-import threading
+from threading import Thread, Timer
 from django.apps import AppConfig
 import paho.mqtt.client as mqtt
 import time
 # from device.models import Device
-Device = None
 cfg_pre = '/usi/device/config/'
 data_pre = '/usi/device/data/'
 pub_pre = '/usi/cloud/config/'
@@ -23,8 +22,9 @@ class MqttClientConfig(AppConfig):
     def ready(self):
         if len(sys.argv)>1 and sys.argv[1] == 'runserver':
             from device.models import Device  # 需要应用加载完了，才能从Django环境中获取到数据库ORM
-            MqttClientConfig.Device= Device
+            MqttClientConfig.Device = Device
             MqttClientConfig.mqtt_run()
+            MqttClientConfig.sync_device()
 
     @staticmethod
     def on_connect(client, userdata, flag, rc):
@@ -39,7 +39,7 @@ class MqttClientConfig(AppConfig):
         # broker = '127.0.0.1'  # 47.52.203.253
         client.username_pw_set('mqtttest', '123456')
         client.reconnect_delay_set(min_delay=1, max_delay=2000)
-        mqttthread = threading.Thread(target=MqttClientConfig.mqtt_function)
+        mqttthread = Thread(target=MqttClientConfig.mqtt_function)
         mqttthread.start()
 
     @staticmethod
@@ -110,3 +110,20 @@ class MqttClientConfig(AppConfig):
         # client.loop()
         # client.loop_forever() 有掉线重连功能
         # client.loop_forever()
+        
+    @staticmethod
+    def sync_device():
+        timer = Timer(5, MqttClientConfig.sync_device)
+        timer.setDaemon(True)
+        timer.start()
+        if client.is_connected():
+            print('sync device config')
+            un_confirm_dev = MqttClientConfig.Device.objects.filter(confirm=False)
+            for dev in un_confirm_dev:
+                sn = dev.id
+                client.publish(pub_pre + sn, json.dumps(dev.pub_msg()), qos=1)
+        else:
+            print('mqtt is not connected')
+
+
+
