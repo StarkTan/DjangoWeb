@@ -4,7 +4,8 @@ from threading import Thread, Timer
 from django.apps import AppConfig
 import paho.mqtt.client as mqtt
 import time
-# from device.models import Device
+from django.dispatch import receiver
+from django.db import models
 cfg_pre = '/usi/device/config/'
 data_pre = '/usi/device/data/'
 pub_pre = '/usi/cloud/config/'
@@ -79,8 +80,6 @@ class MqttClientConfig(AppConfig):
                         else:
                             device.confirm = False
                             device.save()
-                            client.publish(pub_pre + sn, json.dumps(device.pub_msg()), qos=1)
-                            print('confirm dev_config')
             except Exception as e:
                 print(e)
         elif topic.startswith(data_pre):
@@ -113,7 +112,7 @@ class MqttClientConfig(AppConfig):
         
     @staticmethod
     def sync_device():
-        timer = Timer(5, MqttClientConfig.sync_device)
+        timer = Timer(10, MqttClientConfig.sync_device)
         timer.setDaemon(True)
         timer.start()
         if client.is_connected():
@@ -121,9 +120,12 @@ class MqttClientConfig(AppConfig):
             un_confirm_dev = MqttClientConfig.Device.objects.filter(confirm=False)
             for dev in un_confirm_dev:
                 sn = dev.id
-                client.publish(pub_pre + sn, json.dumps(dev.pub_msg()), qos=1)
+                client.publish(pub_pre + sn, json.dumps(dev.pub_msg()), qos=0)
         else:
             print('mqtt is not connected')
 
-
-
+    @staticmethod
+    @receiver(models.signals.post_save, sender=Device)
+    def pub_dev(sender, instance, **kwargs):
+        if not instance.confirm:
+            client.publish(pub_pre + instance.id, json.dumps(instance.pub_msg()), qos=1)

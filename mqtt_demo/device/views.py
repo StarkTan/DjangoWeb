@@ -6,9 +6,8 @@ from .models import Device
 from .serializers import DeviceSerializer
 # Create your views here.
 from rest_framework import viewsets, mixins
-from mqtt_client.apps import client
-
 pub_pre = '/usi/cloud/config/'
+
 
 class DeviceViewSet(mixins.UpdateModelMixin,
                      viewsets.ReadOnlyModelViewSet):
@@ -25,11 +24,8 @@ class DeviceViewSet(mixins.UpdateModelMixin,
         serializer.validated_data['version'] = ver_arr[0]+'.'+str(int(ver_arr[1])+1)
         serializer.validated_data['confirm'] = False
         serializer.save()
-        sn = serializer.data['id']
-        # 推送数据
-        client.publish(pub_pre + sn, json.dumps(Device.objects.get(id=sn).pub_msg()), qos=1)
 
-    @action(methods=['GET'],detail=True)
+    @action(methods=['GET'], detail=True)
     def config(self, request, *args, **kwargs):
         device = self.get_object()
         return Response(device.config)
