@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from .utils import only_superuser
 
 
 def my_login(request):
@@ -42,7 +42,7 @@ def my_logout(request):
     return HttpResponseRedirect(reverse('login'))
 
 
-@login_required(login_url='/login/')
+@only_superuser
 def index(request):
     return HttpResponse("<p>Hello :"+request.user.username+"<p><br/><a href='/logout/'>退出</a>")
 
