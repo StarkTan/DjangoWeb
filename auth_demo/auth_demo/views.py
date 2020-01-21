@@ -2,7 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .utils import only_superuser
+from .utils import only_superuser, single_session
+from django.contrib.auth.decorators import login_required
 
 
 def my_login(request):
@@ -10,15 +11,17 @@ def my_login(request):
     if request.method == 'GET':
         return render(request, 'login.html')
     else:
-        telephone = request.POST.get('username')
+        username = request.POST.get('username')
         password = request.POST.get('password')
         remember = request.POST.get('remember')
         # 验证账号密码是否正确
-        user = authenticate(request, username=telephone, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             # 判断用户是否被冰冻
             if user.is_active:
                 login(request, user)
+                # 设置单一登录
+                single_session(request)
                 # 判断是否记住密码
                 if remember:
                     request.session.set_expiry(24*60*60)
@@ -42,6 +45,7 @@ def my_logout(request):
     return HttpResponseRedirect(reverse('login'))
 
 
+@login_required(login_url="/login/")
 @only_superuser
 def index(request):
     return HttpResponse("<p>Hello :"+request.user.username+"<p><br/><a href='/logout/'>退出</a>")
