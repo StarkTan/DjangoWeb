@@ -43,11 +43,13 @@ def single_session(request):
 secret = b'djaongo_jwt'
 algorithm = 'HS256'
 expire_time = 24*60*60
+token_white = {}
 
 
 def get_token(obj):
     encoded = jwt.encode(obj, secret, algorithm='HS256')
     token = str(encoded, encoding='ascii')
+    token_white[obj['id']] = token
     return token
 
 
@@ -70,13 +72,19 @@ def token_auth(f):
             timestamp = user_info['timestamp']
             if time.time() > expire_time+timestamp:
                 response = {"status": 403,
-                            "message": "Authentication Out Of Time!"}  # Permission Deny!
+                            "message": "Authentication Out Of Time!"}
                 return JsonResponse(response)
             else:
+                user_id = user_info['id']
+                if not user_id in token_white.keys() or not token_white[user_id] == token:
+                    response = {"status": 403,
+                                "message": "Authentication Failed!"}
+                    return JsonResponse(response)
                 request.user_info = user_info
-        except Exception:
+        except Exception as e:
+            print(e)
             response = {"status": 403,
-                        "message": "Authentication Failed!"}  # Permission Deny!
+                        "message": "Authentication Failed!"}
             return JsonResponse(response)
         return f(request, *args, **kwargs)
 
