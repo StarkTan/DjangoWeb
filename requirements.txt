@@ -20,3 +20,4 @@ httpie
 # restapi 展示工具
 drf-yasg
 paho-mqtt
+PyJWT

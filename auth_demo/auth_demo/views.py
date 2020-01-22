@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .utils import only_superuser, single_session
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from .utils import only_superuser, single_session, get_token, token_auth
 from django.contrib.auth.decorators import login_required
-
+import time
 
 def my_login(request):
     # 如果是GET方法，渲染到登录页面，如果是POST方法，进行登录判断
@@ -49,4 +51,51 @@ def my_logout(request):
 @only_superuser
 def index(request):
     return HttpResponse("<p>Hello :"+request.user.username+"<p><br/><a href='/logout/'>退出</a>")
+
+
+@csrf_exempt
+def auth(request):
+    if not request.method == 'POST':
+        response = {"status": 405,
+                    "message": "method not allowed!"}
+        return JsonResponse(response)
+    else:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            response = {'status': 401,
+                       'message':  "username or password error!"}
+            return JsonResponse(response)
+        else:
+            user_info = {"id": user.id,
+                         "super_user": user.is_superuser,
+                         "timestamp": time.time()}
+            token = get_token(user_info)
+            response = {'status': 200,
+                        'usernam': user.username,
+                        'token': token}
+            return JsonResponse(response)
+
+
+@csrf_exempt
+@token_auth
+@only_superuser
+def users(request):
+    if not request.method == 'GET':
+        response = {"status": 405,
+                    "message": "method not allowed!"}
+        return JsonResponse(response)
+
+    users = User.objects.all()
+    data = []
+    for user in users:
+        user_info = {"id": user.id,
+                     "username": user.username,
+                     "email": user.email}
+        data.append(user_info)
+    response = {"status": 405,
+                "data": data}
+    return JsonResponse(response)
+
 
