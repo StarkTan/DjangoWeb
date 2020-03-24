@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<body>
+<button onclick="get()">GET请求</button><br/>
+<button onclick="post()">POST请求</button><br/>
+</body>
+
+<script>
+    function get(){
+        axios.get('/test/?A=12345',{
+            params: {
+                  B: 12345,
+                  C: [123,321],
+                  D: [{'E':123,'F':312}]
+                }
+            })
+          .then(function (response) {
+            // handle success
+            console.log(response);
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
+          .then(function () {
+            // always executed
+          });
+    }
+
+</script>
+
+<script>
+    function post(){
+        axios.post('/test/?A=12345',{
+              B: 12345,
+              C: [123,321],
+              D: [{'E':123,'F':312}]
+            })
+          .then(function (response) {
+            // handle success
+            console.log(response);
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
+          .then(function () {
+            // always executed
+          });
+    }
+
+</script>
+
+
+</html>
